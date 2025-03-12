@@ -24,7 +24,9 @@ def max_eigenvalue(B, p):
     tolerance = 10 ** -p
 
     while True:
+        # Step-by-step power iteration
         next_b = B @ b # [b] = [B][b]
+        # Normalize next_b as a unit vector.
         next_b /= LA.norm(next_b)  # [b] = [b]/|[b]|
 
         curr_rayleigh = rayleigh(B, next_b) # Updated iteration of Rayleigh quotient.
