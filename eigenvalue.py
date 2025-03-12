@@ -10,23 +10,24 @@ def rayleigh(B, b):
     if not np.isclose(LA.norm(b), 1.0):
         raise ValueError('b is not a normal vector (length of 1).')
 
-    return b.T @ B @ b # @ is matrix multiplication, .T is transposition of a matrix.
+    return b.T @ B @ b # Computes Rayleigh quotient [B]^T[b][B].
+                       # @ is matrix multiplication. '.T' is transposition of a matrix.
 
 
 def max_eigenvalue(B, p):
     if B.shape[0] != B.shape[1]:
         raise ValueError('B is not square.')
 
-    b = np.ones((B.shape[0], 1))  # Initialize b as column vector of ones for guessed eigenvector
-    b /= LA.norm(b)  # Fix: Normalize b at initialization
-    prev_rayleigh = rayleigh(B, b) # Initial eigenvalue guess
+    b = np.ones((B.shape[0], 1))  # Initialize b as column vector of ones as a starting vector.
+    b /= LA.norm(b)  # Normalize b at initialization.
+    prev_rayleigh = rayleigh(B, b) # Initial Rayleigh quotient.
     tolerance = 10 ** -p
 
     while True:
         next_b = B @ b # [b] = [B][b]
         next_b /= LA.norm(next_b)  # [b] = [b]/|[b]|
 
-        curr_rayleigh = rayleigh(B, next_b) # Iterations of Rayleigh
+        curr_rayleigh = rayleigh(B, next_b) # Updated iteration of Rayleigh quotient.
 
         if abs(curr_rayleigh - prev_rayleigh) < tolerance:
             return next_b, curr_rayleigh
